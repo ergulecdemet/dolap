@@ -50,10 +50,6 @@ class AppService {
         value.setString('token', jresponse['token']);
         return value;
       });
-      // SharedPreferences sharedPreferences =
-      //     await SharedPreferences.getInstance();
-      // sharedPreferences.setString('token', jresponse['data']['token']);
-      // token = jresponse['data']['token'];
 
       return StatusModel.fromJson(jresponse);
     } catch (e) {
@@ -102,6 +98,26 @@ class AppService {
       return ProductModel(message: "Beklenmedik hata", status: false);
     } finally {
       client.close();
+    }
+  }
+
+  Future<ProductModel> addProduct(UserProductModel userProductModel) async {
+    var client = http.Client();
+    try {
+      var response = await client.post(Uri.parse('${domain}products'), body: {
+        "name": userProductModel.name,
+        "description": userProductModel.description,
+        "price": userProductModel.price.toString(),
+        "category_id": userProductModel.categoryId.toString(),
+      }, headers: {
+        "Accept": "json/application",
+        "Authorization":
+            "Bearer $token", //token gönder miyordun da neden hataya düştü bakacağım şimdi
+      }).timeout(const Duration(seconds: 10));
+      var jresponse = json.decode(response.body);
+      return ProductModel.fromJson(jresponse);
+    } catch (e) {
+      return ProductModel(message: "Beklenmeyenh hata", status: false);
     }
   }
 }

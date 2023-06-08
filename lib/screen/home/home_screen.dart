@@ -49,20 +49,23 @@ class _HomeScreenState extends State<HomeScreen> {
         child: const Icon(Icons.add),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Hoşgeldin ${user.name ?? ""} "),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(products[index].name ?? ""),
-                );
-              },
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Hoşgeldin ${user.name ?? ""} "),
+              ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: products.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(products[index].name ?? ""),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

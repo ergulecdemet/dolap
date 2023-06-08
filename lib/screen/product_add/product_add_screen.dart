@@ -1,4 +1,7 @@
+import 'package:dolap_app/contents/routings.dart';
+import 'package:dolap_app/model/product_model.dart';
 import 'package:dolap_app/screen/register/register_screen.dart';
+import 'package:dolap_app/services/appservice.dart';
 import 'package:flutter/material.dart';
 
 class ProductAdd extends StatefulWidget {
@@ -14,6 +17,21 @@ class _ProductAddState extends State<ProductAdd> {
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _categoryController = TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _nameController.dispose();
+    _priceController.dispose();
+    _descriptionController.dispose();
+    _categoryController.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +57,33 @@ class _ProductAddState extends State<ProductAdd> {
                     hinText: "ürün kategori", controller: _categoryController),
                 Center(
                     child: ElevatedButton(
-                        onPressed: () {}, child: const Text("Ürün Ekle")))
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            await AppService()
+                                .addProduct(UserProductModel(
+                                    name: _nameController.text,
+                                    description: _descriptionController.text,
+                                    price: int.parse(_priceController.text),
+                                    categoryId:
+                                        int.parse(_categoryController.text)))
+                                .timeout(const Duration(seconds: 2))
+                                .then((value) {
+                              if (value.status == true) {
+                                Navigator.pushNamed(
+                                  context,
+                                  AppRoutes.home.path,
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(value.message.toString()),
+                                  ),
+                                );
+                              }
+                            });
+                          }
+                        },
+                        child: const Text("Ürün Ekle")))
               ],
             ),
           )),
