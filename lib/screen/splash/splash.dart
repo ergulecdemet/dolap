@@ -1,3 +1,4 @@
+import 'package:dolap_app/services/appservice.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,16 +12,22 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  static String? token;
   Future splashScreen() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance()
         .timeout(const Duration(seconds: 3));
-    var token = sharedPreferences.getString('token');
+    token = sharedPreferences.getString('token');
+    AppService.token = token;
 
     if (token != null) {
-      Navigator.pushNamed(context, AppRoutes.home.path);
+      Navigator.pushNamed(
+        context,
+        AppRoutes.home.path,
+      );
     } else {
       Navigator.pushNamed(context, AppRoutes.login.path);
     }
+    return token;
   }
 
   @override

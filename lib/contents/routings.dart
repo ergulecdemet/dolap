@@ -1,5 +1,6 @@
 import 'package:dolap_app/screen/home/home_screen.dart';
 import 'package:dolap_app/screen/login/login_screen.dart';
+import 'package:dolap_app/screen/product_add/product_add_screen.dart';
 import 'package:dolap_app/screen/register/register_screen.dart';
 import 'package:dolap_app/screen/splash/splash.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,6 +28,8 @@ class RouteGenerator {
         return createRoute(const LoginScren(), settings);
       case "/home":
         return createRoute(const HomeScreen(), settings);
+      case "/productAdd":
+        return createRoute(const ProductAdd(), settings);
 
       default:
         return MaterialPageRoute(
@@ -41,6 +44,7 @@ enum AppRoutes {
   splash,
   login,
   register,
+  productAdd,
 }
 
 extension MyAppRoutes on AppRoutes {
@@ -54,6 +58,8 @@ extension MyAppRoutes on AppRoutes {
         return "/register";
       case AppRoutes.home:
         return "/home";
+      case AppRoutes.productAdd:
+        return "/productAdd";
 
       default:
         return "";

@@ -1,7 +1,7 @@
 class ProfileModel {
   bool? status;
   String? message;
-  USerProfileModel? data;
+  UserProfileModel? data;
 
   ProfileModel({this.status, this.message, this.data});
 
@@ -9,7 +9,7 @@ class ProfileModel {
     status = json['status'];
     message = json['message'];
     data =
-        json['data'] != null ? USerProfileModel.fromJson(json['data']) : null;
+        json['data'] != null ? UserProfileModel.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -23,7 +23,7 @@ class ProfileModel {
   }
 }
 
-class USerProfileModel {
+class UserProfileModel {
   int? id;
   String? name;
   String? surname;
@@ -34,7 +34,7 @@ class USerProfileModel {
   String? createdAt;
   String? updatedAt;
 
-  USerProfileModel(
+  UserProfileModel(
       {this.id,
       this.name,
       this.surname,
@@ -45,7 +45,7 @@ class USerProfileModel {
       this.createdAt,
       this.updatedAt});
 
-  USerProfileModel.fromJson(Map<String, dynamic> json) {
+  UserProfileModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     surname = json['surname'];

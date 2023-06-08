@@ -1,15 +1,17 @@
 import 'dart:convert';
 
+import 'package:dolap_app/model/product_model.dart';
 import 'package:dolap_app/model/sign_model.dart';
 import 'package:dolap_app/model/status_model.dart';
 import 'package:dolap_app/model/user_model.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppService {
   static String domain = "http://10.10.27.19:5000/api/";
   static String? token;
-  static String? user;
+  static UserProfileModel? user;
 
   Future<StatusModel> register(SignModel signModel) async {
     try {
@@ -66,12 +68,12 @@ class AppService {
           await client.get(Uri.parse('${domain}auth/profile'), headers: {
         "Accept": "applicatin/json",
       }).timeout(const Duration(seconds: 10));
-      user = response.body;
+      user = json.decode(response.body);
     } catch (e) {
       StatusModel(message: "Beklenmedik hata", status: false);
       return null;
     }
-    return ProfileModel.fromJson(json.decode(user!));
+    return ProfileModel.fromJson(json.decode(user.toString()));
   }
 
   Future<StatusModel> logout() async {
@@ -79,4 +81,34 @@ class AppService {
     sharedPreferences.remove('token');
     return StatusModel(message: "Başarılı", status: true);
   }
+
+  Future<ProductModel> getProducts() async {
+    var client = http.Client();
+
+    try {
+      var response = await client.get(Uri.parse('${domain}products'), headers: {
+        "Accept": "application/json",
+        "Authorization": "Bearer $token",
+      }).timeout(const Duration(seconds: 10));
+      debugPrint(token);
+      if (response.statusCode == 200) {
+        var jresponse = json.decode(response.body);
+
+        return ProductModel.fromJson(jresponse);
+      } else {
+        return ProductModel(message: "Beklenmedik hata", status: false);
+      }
+    } catch (e) {
+      return ProductModel(message: "Beklenmedik hata", status: false);
+    } finally {
+      client.close();
+    }
+  }
 }
+ // SharedPreferences sharedPreferences =
+    //     await SharedPreferences.getInstance().then(
+    //   (value) {
+    //     token = value.getString('token');
+    //     return value;
+    //   },
+    // );

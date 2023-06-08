@@ -38,7 +38,10 @@ class _LoginScrenState extends State<LoginScren> {
                             .timeout(const Duration(seconds: 10))
                             .then((value) {
                           if (value.status == true) {
-                            Navigator.pushNamed(context, AppRoutes.home.path);
+                            Navigator.pushNamed(
+                              context,
+                              AppRoutes.home.path,
+                            );
                           }
                         });
                       }
