@@ -66,13 +66,15 @@ class AppService {
       var response =
           await client.get(Uri.parse('${domain}auth/profile'), headers: {
         "Accept": "applicatin/json",
+        "Authorization": "Bearer $token",
       }).timeout(const Duration(seconds: 10));
       user = json.decode(response.body);
+      // return ProfileModel.fromJson(user!.toJson());
     } catch (e) {
       StatusModel(message: "Beklenmedik hata", status: false);
       return null;
     }
-    return ProfileModel.fromJson(json.decode(user.toString()));
+    return null;
   }
 
   Future<StatusModel> logout() async {

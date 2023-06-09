@@ -46,7 +46,12 @@ class _LoginScrenState extends State<LoginScren> {
                         });
                       }
                     },
-                    child: const Text("Giriş"))
+                    child: const Text("Giriş")),
+                TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, AppRoutes.register.path);
+                    },
+                    child: const Text("Kayıt Ol"))
               ],
             ),
           )),

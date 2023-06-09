@@ -1,6 +1,5 @@
 import 'package:dolap_app/contents/routings.dart';
 import 'package:dolap_app/model/product_model.dart';
-import 'package:dolap_app/model/user_model.dart';
 import 'package:dolap_app/services/appservice.dart';
 import 'package:flutter/material.dart';
 
@@ -14,8 +13,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   // AppService appService = AppService();
   List<UserProductModel> products = <UserProductModel>[];
-  UserProfileModel user = UserProfileModel();
-
+  // UserProfileModel? user = UserProfileModel();
   @override
   void initState() {
     super.initState();
@@ -24,8 +22,13 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           products = value.data!;
         });
-      } //copilot yazdı bunu öğren
+      }
     });
+    // AppService().profile().then((value) {
+    //   if (value?.status == true) {
+    //     user = value!.data;
+    //   }
+    // });
   }
 
   @override
@@ -60,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Hoşgeldin ${user.name ?? ""} "),
+              Text("Hoşgeldin ${AppService.user?.name ?? ""}"),
               ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
@@ -68,6 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemBuilder: (context, index) {
                   return ListTile(
                     title: Text(products[index].name ?? ""),
+                    subtitle: Text(products[index].categoryId.toString()),
                   );
                 },
               ),
