@@ -1,5 +1,4 @@
-import 'package:dolap_app/contents/routings.dart';
-import 'package:dolap_app/model/product_model.dart';
+import 'package:dolap_app/model/user_product_model.dart';
 import 'package:dolap_app/screen/register/register_screen.dart';
 import 'package:dolap_app/services/appservice.dart';
 import 'package:flutter/material.dart';
@@ -18,20 +17,14 @@ class _ProductAddState extends State<ProductAdd> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _categoryController = TextEditingController();
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    _nameController.dispose();
-    _priceController.dispose();
-    _descriptionController.dispose();
-    _categoryController.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   _nameController.dispose();
+  //   _priceController.dispose();
+  //   _descriptionController.dispose();
+  //   _categoryController.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -60,23 +53,19 @@ class _ProductAddState extends State<ProductAdd> {
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             await AppService()
-                                .addProduct(UserProductModel(
-                                    name: _nameController.text,
-                                    description: _descriptionController.text,
-                                    price: int.parse(_priceController.text),
-                                    categoryId:
-                                        int.parse(_categoryController.text)))
-                                .timeout(const Duration(seconds: 2))
+                                .addProduct(UserProModel(
+                              name: _nameController.text,
+                              description: _descriptionController.text,
+                              price: _priceController.text,
+                              categoryId: _categoryController.text,
+                            ))
                                 .then((value) {
-                              if (value.status == true) {
-                                Navigator.pushNamed(
-                                  context,
-                                  AppRoutes.home.path,
-                                );
+                              if (value?.status == true) {
+                                Navigator.pop(context);
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: Text(value.message.toString()),
+                                    content: Text(value!.message.toString()),
                                   ),
                                 );
                               }

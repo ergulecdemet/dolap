@@ -1,3 +1,4 @@
+import 'package:dolap_app/screen/category/category_add.dart';
 import 'package:dolap_app/screen/home/home_screen.dart';
 import 'package:dolap_app/screen/login/login_screen.dart';
 import 'package:dolap_app/screen/product_add/product_add_screen.dart';
@@ -30,6 +31,8 @@ class RouteGenerator {
         return createRoute(const HomeScreen(), settings);
       case "/productAdd":
         return createRoute(const ProductAdd(), settings);
+      case "/categoryAdd":
+        return createRoute(const CategoryAdd(), settings);
 
       default:
         return MaterialPageRoute(
@@ -45,6 +48,7 @@ enum AppRoutes {
   login,
   register,
   productAdd,
+  categoryAdd,
 }
 
 extension MyAppRoutes on AppRoutes {
@@ -60,6 +64,8 @@ extension MyAppRoutes on AppRoutes {
         return "/home";
       case AppRoutes.productAdd:
         return "/productAdd";
+      case AppRoutes.categoryAdd:
+        return "/categoryAdd";
 
       default:
         return "";

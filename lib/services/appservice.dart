@@ -4,6 +4,7 @@ import 'package:dolap_app/model/product_model.dart';
 import 'package:dolap_app/model/sign_model.dart';
 import 'package:dolap_app/model/status_model.dart';
 import 'package:dolap_app/model/user_model.dart';
+import 'package:dolap_app/model/user_product_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -101,7 +102,7 @@ class AppService {
     }
   }
 
-  Future<ProductModel> addProduct(UserProductModel userProductModel) async {
+  Future<StatusModel?> addProduct(UserProModel userProductModel) async {
     var client = http.Client();
     try {
       var response = await client.post(Uri.parse('${domain}products'), body: {
@@ -111,14 +112,14 @@ class AppService {
         "category_id": userProductModel.categoryId.toString(),
       }, headers: {
         "Accept": "json/application",
-        "Authorization":
-            "Bearer $token", //token gönder miyordun da neden hataya düştü bakacağım şimdi
+        "Authorization": "Bearer $token",
       }).timeout(const Duration(seconds: 10));
       var jresponse = json.decode(response.body);
-      return ProductModel.fromJson(jresponse);
+      return StatusModel.fromJson(jresponse);
     } catch (e) {
-      return ProductModel(message: "Beklenmeyenh hata", status: false);
+      StatusModel(message: "Beklenmedik hata", status: false);
     }
+    return null;
   }
 }
  // SharedPreferences sharedPreferences =

@@ -15,10 +15,10 @@ class _HomeScreenState extends State<HomeScreen> {
   // AppService appService = AppService();
   List<UserProductModel> products = <UserProductModel>[];
   UserProfileModel user = UserProfileModel();
+
   @override
   void initState() {
     super.initState();
-
     AppService().getProducts().then((value) {
       if (value.status == true) {
         setState(() {
@@ -32,6 +32,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, AppRoutes.categoryAdd.path);
+              },
+              icon: const Icon(Icons.category))
+        ],
         leading: IconButton(
             onPressed: () {
               AppService().logout().then((value) {
