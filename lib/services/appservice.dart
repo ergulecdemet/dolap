@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dolap_app/model/category_add_model.dart';
 import 'package:dolap_app/model/product_model.dart';
 import 'package:dolap_app/model/sign_model.dart';
 import 'package:dolap_app/model/status_model.dart';
@@ -121,7 +122,25 @@ class AppService {
     }
     return null;
   }
+
+  Future<StatusModel?> addCategory(CategoryAddModel categoryAddModel) async {
+    var client = http.Client();
+    try {
+      var response = await client.post(Uri.parse('${domain}category'), body: {
+        "name": categoryAddModel.name,
+      }, headers: {
+        "Accept": "json/application",
+        "Authorization": "Bearer $token",
+      }).timeout(const Duration(seconds: 10));
+      var jresponse = json.decode(response.body);
+      return StatusModel.fromJson(jresponse);
+    } catch (e) {
+      StatusModel(message: "Beklenmedik hata", status: false);
+    }
+    return null;
+  }
 }
+
  // SharedPreferences sharedPreferences =
     //     await SharedPreferences.getInstance().then(
     //   (value) {
