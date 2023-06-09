@@ -1,3 +1,4 @@
+import 'package:dolap_app/contents/routings.dart';
 import 'package:dolap_app/model/category_add_model.dart';
 import 'package:dolap_app/screen/register/register_screen.dart';
 import 'package:dolap_app/services/appservice.dart';
@@ -23,7 +24,16 @@ class _CategoryAddState extends State<CategoryAdd> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Category Ekle")),
+      appBar: AppBar(
+        title: const Text("Category Ekle"),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, AppRoutes.categoryList.path);
+              },
+              icon: const Icon(Icons.looks_5_rounded))
+        ],
+      ),
       body: Form(
           key: _formKey,
           child: Column(

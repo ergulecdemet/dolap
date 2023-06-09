@@ -1,4 +1,5 @@
 class CategoryAddModel {
   String name;
-  CategoryAddModel({required this.name});
+  String? description;
+  CategoryAddModel({required this.name, this.description});
 }

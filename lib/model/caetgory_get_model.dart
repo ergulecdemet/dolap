@@ -1,14 +1,19 @@
-class CategoryGetModel {
+class MyCategoryGetModel {
   bool? status;
   String? message;
-  Data? data;
+  List<MyCatgeoryDataModel>? data;
 
-  CategoryGetModel({this.status, this.message, this.data});
+  MyCategoryGetModel({this.status, this.message, this.data});
 
-  CategoryGetModel.fromJson(Map<String, dynamic> json) {
+  MyCategoryGetModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    if (json['data'] != null) {
+      data = <MyCatgeoryDataModel>[];
+      json['data'].forEach((v) {
+        data!.add(MyCatgeoryDataModel.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -16,33 +21,37 @@ class CategoryGetModel {
     data['status'] = status;
     data['message'] = message;
     if (this.data != null) {
-      data['data'] = this.data!.toJson();
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-class Data {
-  String? name;
-  String? updatedAt;
-  String? createdAt;
+class MyCatgeoryDataModel {
   int? id;
+  String? name;
+  String? description;
+  String? createdAt;
+  String? updatedAt;
 
-  Data({this.name, this.updatedAt, this.createdAt, this.id});
+  MyCatgeoryDataModel(
+      {this.id, this.name, this.description, this.createdAt, this.updatedAt});
 
-  Data.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    updatedAt = json['updated_at'];
-    createdAt = json['created_at'];
+  MyCatgeoryDataModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    name = json['name'];
+    description = json['description'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['name'] = name;
-    data['updated_at'] = updatedAt;
-    data['created_at'] = createdAt;
     data['id'] = id;
+    data['name'] = name;
+    data['description'] = description;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
     return data;
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dolap_app/model/caetgory_get_model.dart';
 import 'package:dolap_app/model/category_add_model.dart';
 import 'package:dolap_app/model/product_model.dart';
 import 'package:dolap_app/model/sign_model.dart';
@@ -128,6 +129,7 @@ class AppService {
     try {
       var response = await client.post(Uri.parse('${domain}category'), body: {
         "name": categoryAddModel.name,
+        "description": categoryAddModel.description,
       }, headers: {
         "Accept": "json/application",
         "Authorization": "Bearer $token",
@@ -138,6 +140,27 @@ class AppService {
       StatusModel(message: "Beklenmedik hata", status: false);
     }
     return null;
+  }
+
+  Future<MyCategoryGetModel> getCategory() async {
+    var client = http.Client();
+    try {
+      var response = await client.get(Uri.parse('${domain}category'), headers: {
+        "Accept": "json/application",
+        "Authorization": "Bearer $token",
+      }).timeout(const Duration(seconds: 10));
+      if (response.statusCode == 200) {
+        var jresponse = json.decode(response.body);
+        return MyCategoryGetModel.fromJson(jresponse);
+      } else {
+        return MyCategoryGetModel(
+            message: "Beklenmedik hata var", status: false);
+      }
+    } catch (e) {
+      return MyCategoryGetModel(message: "Beklenmedik hata var", status: false);
+    } finally {
+      client.close();
+    }
   }
 }
 
