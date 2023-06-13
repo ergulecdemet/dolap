@@ -25,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (value?.status == true) {
         setState(() {
           AppService.user = value!.data;
+          AppService.user?.money = value.data?.money;
         });
       }
     });
@@ -46,11 +47,13 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, AppRoutes.categoryAdd.path);
-              },
-              icon: const Icon(Icons.category))
+          AppService.user?.userType == int.parse("2")
+              ? IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, AppRoutes.categoryAdd.path);
+                  },
+                  icon: const Icon(Icons.category))
+              : const Text(""),
         ],
         leading: IconButton(
             onPressed: () {
@@ -67,18 +70,26 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             icon: const Icon(Icons.sensor_door_rounded)),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, AppRoutes.productAdd.path);
-        },
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: AppService.user?.userType == int.parse("1")
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.pushNamed(context, AppRoutes.productAdd.path);
+              },
+              child: const Icon(Icons.add),
+            )
+          : null,
       body: Center(
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Hoşgeldin ${AppService.user?.name ?? ""}"),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text("Hoşgeldin ${AppService.user?.name ?? ""}"),
+                  Text("Bakiyeniz: ${AppService.user?.money ?? ""}")
+                ],
+              ),
               ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
@@ -87,25 +98,28 @@ class _HomeScreenState extends State<HomeScreen> {
                   return ListTile(
                     title: Text(products[index].name ?? ""),
                     subtitle: Text(products[index].id.toString()),
-                    leading: IconButton(
-                        onPressed: () {
-                          setState(() {});
-                          AppService()
-                              .buyProduct(products[index].id!)
-                              .then((value) {
-                            if (value.status == true) {
-                              isBuy = _selected == index ? true : false;
-                              products.removeAt(index);
-                              print("alındı");
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text(value.message ?? "")));
-                            }
-                          });
-                        },
-                        icon: isBuy == false
-                            ? const Icon(Icons.circle)
-                            : const Icon(Icons.check_box)),
+                    leading: AppService.user?.userType == int.parse("2")
+                        ? null
+                        : IconButton(
+                            onPressed: () {
+                              AppService()
+                                  .buyProduct(products[index].id!)
+                                  .then((value) {
+                                setState(() {});
+                                if (value.status == true) {
+                                  isBuy = _selected == index ? true : false;
+                                  products.removeAt(index);
+                                  print("alındı");
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(value.message ?? "")));
+                                }
+                              });
+                            },
+                            icon: isBuy == false
+                                ? const Icon(Icons.circle)
+                                : const Icon(Icons.check_box)),
                   );
                 },
               ),

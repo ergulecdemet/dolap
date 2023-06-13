@@ -13,10 +13,16 @@ class _MoneyScreenState extends State<MoneyScreen> {
   final TextEditingController _moneyController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
+  void dispose() {
+    super.dispose();
+    _moneyController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Para Yükle"),
+        title: const Text("Bakkiye Yükle"),
       ),
       body: Center(
         child: Column(
@@ -35,6 +41,10 @@ class _MoneyScreenState extends State<MoneyScreen> {
                         .then((value) {
                       if (value.status == true) {
                         Navigator.pop(context);
+                        setState(() {});
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(value.message!)));
                       }
                     });
                   }
