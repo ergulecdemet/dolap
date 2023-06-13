@@ -2,14 +2,16 @@ class ProfileModel {
   bool? status;
   String? message;
   UserProfileModel? data;
+  String? token;
 
-  ProfileModel({this.status, this.message, this.data});
+  ProfileModel({this.status, this.message, this.data, this.token});
 
   ProfileModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
     data =
         json['data'] != null ? UserProfileModel.fromJson(json['data']) : null;
+    token = json['token'];
   }
 
   Map<String, dynamic> toJson() {
@@ -19,6 +21,7 @@ class ProfileModel {
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
+    data['token'] = token;
     return data;
   }
 }
@@ -30,6 +33,7 @@ class UserProfileModel {
   int? userType;
   String? email;
   String? emailVerifiedAt;
+  String? money;
   String? photo;
   String? createdAt;
   String? updatedAt;
@@ -41,6 +45,7 @@ class UserProfileModel {
       this.userType,
       this.email,
       this.emailVerifiedAt,
+      this.money,
       this.photo,
       this.createdAt,
       this.updatedAt});
@@ -52,6 +57,7 @@ class UserProfileModel {
     userType = json['user_type'];
     email = json['email'];
     emailVerifiedAt = json['email_verified_at'];
+    money = json['money'];
     photo = json['photo'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
@@ -65,6 +71,7 @@ class UserProfileModel {
     data['user_type'] = userType;
     data['email'] = email;
     data['email_verified_at'] = emailVerifiedAt;
+    data['money'] = money;
     data['photo'] = photo;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;

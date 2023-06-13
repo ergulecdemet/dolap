@@ -42,6 +42,12 @@ class _LoginScrenState extends State<LoginScren> {
                               context,
                               AppRoutes.home.path,
                             );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(value.message.toString()),
+                              ),
+                            );
                           }
                         });
                       }

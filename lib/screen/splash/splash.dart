@@ -19,14 +19,21 @@ class _SplashScreenState extends State<SplashScreen> {
     token = sharedPreferences.getString('token');
     AppService.token = token;
 
-    if (token != null) {
-      Navigator.pushNamed(
-        context,
-        AppRoutes.home.path,
-      );
-    } else {
-      Navigator.pushNamed(context, AppRoutes.login.path);
-    }
+    AppService().profile().then((value) {
+      if (value != null && value.status == true) {
+        setState(() {
+          AppService.user = value.data;
+        });
+
+        Navigator.pushNamed(
+          context,
+          AppRoutes.home.path,
+        );
+      } else {
+        Navigator.pushNamed(context, AppRoutes.login.path);
+      }
+    });
+
     return token;
   }
 

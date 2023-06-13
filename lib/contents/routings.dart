@@ -2,6 +2,7 @@ import 'package:dolap_app/screen/category/category_add.dart';
 import 'package:dolap_app/screen/category/category_list.dart';
 import 'package:dolap_app/screen/home/home_screen.dart';
 import 'package:dolap_app/screen/login/login_screen.dart';
+import 'package:dolap_app/screen/money/mondey.dart';
 import 'package:dolap_app/screen/product_add/product_add_screen.dart';
 import 'package:dolap_app/screen/register/register_screen.dart';
 import 'package:dolap_app/screen/splash/splash.dart';
@@ -36,6 +37,8 @@ class RouteGenerator {
         return createRoute(const CategoryAdd(), settings);
       case "/categoryList":
         return createRoute(const CategoryList(), settings);
+      case "/money":
+        return createRoute(const MoneyScreen(), settings);
 
       default:
         return MaterialPageRoute(
@@ -53,6 +56,7 @@ enum AppRoutes {
   productAdd,
   categoryAdd,
   categoryList,
+  money,
 }
 
 extension MyAppRoutes on AppRoutes {
@@ -72,6 +76,8 @@ extension MyAppRoutes on AppRoutes {
         return "/categoryAdd";
       case AppRoutes.categoryList:
         return "/categoryList";
+      case AppRoutes.money:
+        return "/money";
 
       default:
         return "";

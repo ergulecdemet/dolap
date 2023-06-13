@@ -14,11 +14,13 @@ class CategoryAdd extends StatefulWidget {
 class _CategoryAddState extends State<CategoryAdd> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _categoryNameController = TextEditingController();
+  final TextEditingController _catgeoryDescriptionController =
+      TextEditingController();
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _categoryNameController.dispose();
+    _catgeoryDescriptionController.dispose();
   }
 
   @override
@@ -41,12 +43,16 @@ class _CategoryAddState extends State<CategoryAdd> {
             children: [
               CustomTextFromField(
                   hinText: "kategori adı", controller: _categoryNameController),
+              CustomTextFromField(
+                  hinText: "kategori adı",
+                  controller: _catgeoryDescriptionController),
               ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       await AppService()
                           .addCategory(CategoryAddModel(
-                              name: _categoryNameController.text))
+                              name: _categoryNameController.text,
+                              description: _catgeoryDescriptionController.text))
                           .then((value) {
                         if (value?.status == true) {
                           Navigator.pop(context);

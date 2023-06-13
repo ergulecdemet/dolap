@@ -74,6 +74,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             .then((value) {
                           if (value.status == true) {
                             Navigator.pushNamed(context, AppRoutes.home.path);
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(value.message.toString()),
+                              ),
+                            );
                           }
                         });
                       }

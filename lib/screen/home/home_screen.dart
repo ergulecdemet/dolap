@@ -5,15 +5,12 @@ import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // AppService appService = AppService();
   List<UserProductModel> products = <UserProductModel>[];
-  // UserProfileModel? user = UserProfileModel();
   @override
   void initState() {
     super.initState();
@@ -24,17 +21,30 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       }
     });
-    // AppService().profile().then((value) {
-    //   if (value?.status == true) {
-    //     user = value!.data;
-    //   }
-    // });
+    AppService().profile().then((value) {
+      if (value?.status == true) {
+        setState(() {
+          AppService.user = value!.data;
+        });
+      }
+    });
   }
 
+  bool isBuy = false;
+  final int _selected = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: TextButton(
+          onPressed: () {
+            Navigator.pushNamed(context, AppRoutes.money.path);
+          },
+          child: const Text(
+            "Para Yükle",
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
         actions: [
           IconButton(
               onPressed: () {
@@ -48,6 +58,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (value.status == true) {
                   Navigator.pushNamed(context, AppRoutes.login.path);
                 }
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(value.message.toString()),
+                  ),
+                );
               });
             },
             icon: const Icon(Icons.sensor_door_rounded)),
@@ -71,7 +86,26 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemBuilder: (context, index) {
                   return ListTile(
                     title: Text(products[index].name ?? ""),
-                    subtitle: Text(products[index].categoryId.toString()),
+                    subtitle: Text(products[index].id.toString()),
+                    leading: IconButton(
+                        onPressed: () {
+                          setState(() {});
+                          AppService()
+                              .buyProduct(products[index].id!)
+                              .then((value) {
+                            if (value.status == true) {
+                              isBuy = _selected == index ? true : false;
+                              products.removeAt(index);
+                              print("alındı");
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(value.message ?? "")));
+                            }
+                          });
+                        },
+                        icon: isBuy == false
+                            ? const Icon(Icons.circle)
+                            : const Icon(Icons.check_box)),
                   );
                 },
               ),

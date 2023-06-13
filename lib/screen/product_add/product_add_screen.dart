@@ -1,3 +1,4 @@
+import 'package:dolap_app/contents/routings.dart';
 import 'package:dolap_app/model/caetgory_get_model.dart';
 import 'package:dolap_app/model/user_product_model.dart';
 import 'package:dolap_app/screen/register/register_screen.dart';
@@ -18,18 +19,18 @@ class _ProductAddState extends State<ProductAdd> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _categoryController = TextEditingController();
   var selectedCatgeory;
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   _nameController.dispose();
-  //   _priceController.dispose();
-  //   _descriptionController.dispose();
-  //   _categoryController.dispose();
-  // }
+  @override
+  void dispose() {
+    super.dispose();
+    _nameController.dispose();
+    _priceController.dispose();
+    _descriptionController.dispose();
+    _categoryController.dispose();
+  }
+
   List<MyCatgeoryDataModel> catgories = [];
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     AppService().getCategory().then((value) {
       if (value.status == true) {
@@ -69,7 +70,7 @@ class _ProductAddState extends State<ProductAdd> {
                   },
                   items: catgories.map((MyCatgeoryDataModel value) {
                     return DropdownMenuItem<String>(
-                      value: value.name.toString(),
+                      value: value.id.toString(),
                       child: Text(value.name.toString()),
                     );
                   }).toList(),
@@ -93,7 +94,8 @@ class _ProductAddState extends State<ProductAdd> {
                             ))
                                 .then((value) {
                               if (value?.status == true) {
-                                Navigator.pop(context);
+                                Navigator.pushNamed(
+                                    context, AppRoutes.home.path);
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(

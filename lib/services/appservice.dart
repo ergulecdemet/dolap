@@ -12,7 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppService {
-  static String domain = "http://10.10.27.19:5000/api/";
+  static String domain = "http://10.10.27.87:5000/api/";
   static String? token;
   static UserProfileModel? user;
 
@@ -62,19 +62,24 @@ class AppService {
 
   Future<ProfileModel?> profile() async {
     var client = http.Client();
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     try {
       var response =
           await client.get(Uri.parse('${domain}auth/profile'), headers: {
         "Accept": "applicatin/json",
         "Authorization": "Bearer $token",
       }).timeout(const Duration(seconds: 10));
-      user = json.decode(response.body);
-      // return ProfileModel.fromJson(user!.toJson());
+      if (response.statusCode == 200) {
+        var jResponse = json.decode(response.body);
+        user = UserProfileModel.fromJson(jResponse);
+        return ProfileModel.fromJson(jResponse);
+      } else {
+        return null;
+      }
     } catch (e) {
       StatusModel(message: "Beklenmedik hata", status: false);
       return null;
     }
-    return null;
   }
 
   Future<StatusModel> logout() async {
@@ -162,6 +167,40 @@ class AppService {
       return MyCategoryGetModel(message: "Beklenmedik hata var", status: false);
     } finally {
       client.close();
+    }
+  }
+
+  Future<StatusModel> buyProduct(int productId) async {
+    var client = http.Client();
+    try {
+      var response = await client.post(Uri.parse('${domain}buyProduct'), body: {
+        "product_id": productId.toString(),
+      }, headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token'
+      });
+
+      var jresponse = json.decode(response.body);
+      return StatusModel.fromJson(jresponse);
+    } catch (e) {
+      return StatusModel(message: "Beklenmedik hata", status: false);
+    }
+  }
+
+  Future<StatusModel> addMoney(int money) async {
+    var client = http.Client();
+    try {
+      var response =
+          await client.post(Uri.parse('${domain}auth/profile'), body: {
+        "money": money.toString(),
+      }, headers: {
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
+      });
+      var jresponse = json.decode(response.body);
+      return StatusModel.fromJson(jresponse);
+    } catch (e) {
+      return StatusModel(message: "Beklenmedik hata", status: false);
     }
   }
 }
